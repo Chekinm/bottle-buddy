@@ -92,18 +92,19 @@ WSGI_APPLICATION = 'bottle_buddy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES_LOCAL = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DJANGO_DB_NAME'),
-        'USER': config('DJANGO_DB_USER'),
-        'PASSWORD': config('DJANGO_DB_PASSWORD'),
-        'HOST': config('DJANGO_DB_HOST'),
-        'PORT': config('DJANGO_DB_PORT'),
-    }
-}
+# DATABASES_LOCAL = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DJANGO_DB_NAME'),
+#         'USER': config('DJANGO_DB_USER'),
+#         'PASSWORD': config('DJANGO_DB_PASSWORD'),
+#         'HOST': config('DJANGO_DB_HOST'),
+#         'PORT': config('DJANGO_DB_PORT'),
+#     }
+# }
+# DATABASES_LOCAL if 'RENDER' not in os.environ else
 
-DATABASES = DATABASES_LOCAL if 'RENDER' not in os.environ else {
+DATABASES =  {
     'default': dj_database_url.config (
         default='postgres://dbuser:0oH6faqUbSUUb9EoNnr2Y6agGH14uaUj@dpg-cie33q98g3n4p2rb8bsg-a/bottle_buddy_db',
         conn_max_age=600,
