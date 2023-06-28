@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 from decouple import config
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('DJANGO_SECRET_KEY')
+#SECRET_KEY = config('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get("SECRET_KEY", "234234233rwdfw234234")
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG  = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -82,7 +92,7 @@ WSGI_APPLICATION = 'bottle_buddy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
+DATABASES_LOCAL = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DJANGO_DB_NAME'),
@@ -92,6 +102,16 @@ DATABASES = {
         'PORT': config('DJANGO_DB_PORT'),
     }
 }
+
+DATABASES = DATABASES_LOCAL if 'RENDER' not in os.environ else {
+    'default': dj_database_url.config (
+        default='postgres://dbuser:0oH6faqUbSUUb9EoNnr2Y6agGH14uaUj@dpg-cie33q98g3n4p2rb8bsg-a/bottle_buddy_db',
+        conn_max_age=600,
+        conn_health_checks=True,
+     ),
+    } 
+
+
 
 
 # Password validation
@@ -192,6 +212,12 @@ SIMPLE_JWT = {
 CORS_ORIGIN_ALLOW_ALL = True  # Set this to True to allow all origins
 
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS= [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+
+]
 
 #django debug_toolbar specific
 INTERNAL_IPS = [
