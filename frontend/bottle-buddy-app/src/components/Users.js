@@ -20,7 +20,7 @@ const Users = () => {
                     withCredentials: true
                 }
             );
-            console.log('cookies', Cookies.get('access_token'))
+            console.log('cookies', response.headres)
             console.log(JSON.stringify(response?.data));    
             console.log(response);
             } catch (err) {

@@ -86,8 +86,8 @@ class AddressAPI(AddressOperationsMixin, GenericViewSet):
 class CookieTokenObtainPairView(TokenObtainPairView):
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('access'):
-            response.set_cookie('access_token', response.data['access'], httponly=True)
-            response.set_cookie('refresh_token', response.data['refresh'], httponly=True)
+            response.set_cookie('access_token', response.data['access'], samesite='None', secure=True, httponly=True)
+            response.set_cookie('refresh_token', response.data['refresh'], samesite='None', secure=True, httponly=True)
             del response.data['access']
             del response.data['refresh']
         return super().finalize_response(request, response, *args, **kwargs)
@@ -108,7 +108,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
 class CookieTokenRefreshView(TokenRefreshView):
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('access'):
-            response.set_cookie('access_token', response.data['access'], httponly=True)
+            response.set_cookie('access_token', response.data['access'], samesite='None', secure=True, httponly=True)
             del response.data['access']
         return super().finalize_response(request, response, *args, **kwargs)
     
