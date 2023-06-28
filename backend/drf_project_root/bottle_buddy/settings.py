@@ -210,15 +210,31 @@ SIMPLE_JWT = {
 }
 
 
-CORS_ORIGIN_ALLOW_ALL = True  # Set this to True to allow all origins
 
+
+# CORS_ORIGIN_ALLOW_ALL = True  # Set this to True to allow all origins
+
+# CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ALLOWED_ORIGINS= [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+
+# ]
+
+from corsheaders.defaults import default_headers
+CORS_ALLOW_ALL_ORIGINS=  False
 CORS_ALLOW_CREDENTIALS = True
-
-CORS_ALLOWED_ORIGINS= [
-    "http://localhost:3000",
+CORS_ALLOWED_ORIGINS = [
+    "https://bottle-buddy.onrender.com",
     "http://127.0.0.1:3000",
-
+    "http://localhost:3000",
 ]
+#making sure CORS_ALLOW_HEADERS  is not "*"
+CORS_ALLOW_HEADERS = list(default_headers) + ['Set-Cookie']
+
+
+
 
 #django debug_toolbar specific
 INTERNAL_IPS = [
