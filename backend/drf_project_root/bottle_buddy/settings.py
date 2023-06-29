@@ -15,6 +15,7 @@ from pathlib import Path
 from decouple import config
 import os
 import dj_database_url
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,21 +24,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = config('DJANGO_SECRET_KEY')
-SECRET_KEY = os.environ.get("SECRET_KEY", "234234233rwdfw234234")
-
-
+SECRET_KEY = os.environ.get("SECRET_KEY", config('DJANGO_SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG  = 'RENDER' not in os.environ
+
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-
 
 # Application definition
 
@@ -59,7 +57,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware', 
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -85,9 +83,8 @@ TEMPLATES = [
     },
 ]
 
-#need to know something about this
+# need to know something about this
 WSGI_APPLICATION = 'bottle_buddy.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -104,16 +101,14 @@ WSGI_APPLICATION = 'bottle_buddy.wsgi.application'
 # }
 # DATABASES_LOCAL if 'RENDER' not in os.environ else
 
-DATABASES =  {
-    'default': dj_database_url.config (
-        default='postgres://dbuser:0oH6faqUbSUUb9EoNnr2Y6agGH14uaUj@dpg-cie33q98g3n4p2rb8bsg-a/bottle_buddy_db',
+DATABASES = {
+    'default': dj_database_url.config(
+        default=('postgres://dbuser:0oH6faqUbSUUb9EoNnr2Y6agGH14uaUj@'
+                 'dpg-cie33q98g3n4p2rb8bsg-a/bottle_buddy_db'),
         conn_max_age=600,
         conn_health_checks=True,
      ),
-    } 
-
-
-
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -133,7 +128,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -144,7 +138,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -159,20 +152,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'bottles.User'
 
 REST_FRAMEWORK = {
-    
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'bottles.auth.CookieJWTAuthentication',
-        
     ]
-    
 }
 
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=28),
+    "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
 
@@ -210,33 +200,17 @@ SIMPLE_JWT = {
 }
 
 
-
-
-# CORS_ORIGIN_ALLOW_ALL = True  # Set this to True to allow all origins
-
-# CORS_ALLOW_CREDENTIALS = True
-
-# CORS_ALLOWED_ORIGINS= [
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000",
-
-# ]
-
-from corsheaders.defaults import default_headers
-CORS_ALLOW_ALL_ORIGINS=  False
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://bottle-buddy.onrender.com",
     "http://127.0.0.1:3000",
     "http://localhost:3000",
 ]
-#making sure CORS_ALLOW_HEADERS  is not "*"
+# making sure CORS_ALLOW_HEADERS  is not "*"
 CORS_ALLOW_HEADERS = list(default_headers) + ['Set-Cookie']
 
-
-
-
-#django debug_toolbar specific
+# django debug_toolbar specific
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
