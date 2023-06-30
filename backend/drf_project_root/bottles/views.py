@@ -4,8 +4,8 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView,
                                             TokenVerifyView,
-                                            RefreshToken,
                                             )
+from rest_framework_simplejwt.tokens import RefreshToken
 from .auth import CookieJWTAuthentication
 
 from rest_framework.permissions import (IsAuthenticated,
@@ -41,7 +41,7 @@ from .mixin import (UserOperationsMixin,
 
 
 class CreateUserAPI (UserOperationsMixin, GenericAPIView):
-    authentication_classes = [CookieJWTAuthentication, ]
+    authentication_classes = []
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):

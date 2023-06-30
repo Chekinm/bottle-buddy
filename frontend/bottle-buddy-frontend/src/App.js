@@ -1,14 +1,13 @@
 import './App.css';
+import Register from './components/Register';
 import Users from './components/Users';
-
 
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        Hello world
-        <Users />
+        <Register />
       </header>
     </div>
   );

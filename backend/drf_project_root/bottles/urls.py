@@ -10,7 +10,7 @@ from .views import (CreateUserAPI,
                     TypeOfGoodsAPI,
                     # RecyclePointAPI,
                     AddressAPI,
-                    index)
+                    )
 
 
 urlpatterns = [
@@ -20,10 +20,10 @@ urlpatterns = [
     path('typeofgoods/', TypeOfGoodsAPI.as_view({'get': 'list'})),
     path('addresses/', AddressAPI.as_view({'get': 'list'})),
 
-    path('token/', 
+    path('token/',
          CookieTokenObtainPairView.as_view(),
          name='token_obtain_pair'),
-    
+
     path('token/refresh/',
          CookieTokenRefreshView.as_view(),
          name='token_refresh'),
@@ -32,7 +32,7 @@ urlpatterns = [
          CookieTokenVerifyView.as_view(),
          name='token_verify'),
 
-    path('index/', index),
+   
     
     # path('employees', EmployeesViewSet.as_view({'get':'list', 'post':'create'}), name='employees'), 
     # path('employees/<int:pk>', EmployeeDetailedViewSet.as_view({'get':'retrieve', 'put':'update'}), name='employee-detailed'), 

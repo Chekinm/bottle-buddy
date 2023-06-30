@@ -14,7 +14,7 @@ const Users = () => {
             try {
                 const response = await axios1.post('/api/token/', 
                     
-                    JSON.stringify({"email":"su@su.su","password":"su"}),
+                    JSON.stringify({"email":"a@a.com","password":"a"}),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -28,8 +28,6 @@ const Users = () => {
             }
         }
         
-        
-        
         const getUsers = async () => {
             try {
                 const response = await axios1.get('/api/users/', {
@@ -42,8 +40,6 @@ const Users = () => {
                 console.error(err);
             }
         }
-
-
 
         login()
         // getUsers()
