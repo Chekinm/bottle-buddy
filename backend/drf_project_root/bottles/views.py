@@ -108,22 +108,22 @@ class CookieTokenObtainPairView(TokenObtainPairView):
             response.set_cookie(
                 'access_token',
                 response.data['access'],
-                # samesite='none', #need to test this on production domains
-                # secure=True,
+                samesite='none', #need to test this on production domains
+                secure=True,
                 httponly=True,
                 )
             response.set_cookie(
                 'refresh_token',
                 response.data['refresh'],
-                # samesite='None',
-                # secure=True,
+                samesite='None',
+                secure=True,
                 httponly=True,
                 )
             response.set_cookie(
                 'user_info_token',
                 f'{response.data["first_name"]} {response.data["last_name"]}',
-                # samesite='None',
-                # secure=True,
+                samesite='None',
+                secure=True,
                 )
             del response.data['access']
             del response.data['refresh']
