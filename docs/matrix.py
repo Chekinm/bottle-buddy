@@ -1,0 +1,14 @@
+import requests
+
+url = "https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix"
+
+# querystring = {"origins":"31.96674897961503,34.811755267356546;31.966980044403254, 34.80841870210824;31.96363311798393, 34.8016002450864;31.9649992539683, 34.814738279129216"}
+querystring = {"origins": "31.952395508349124, 34.81720724844795; 31.96573768773018, 34.830073891069524; 31.94870423431, 34.817332729748486; 31.950297781672457, 34.81768829472784; 31.96322551046745, 34.831318436107374"}
+headers = {
+	"X-RapidAPI-Key": "22e69565e9msh0b238020c0d2939p11c95ejsn69d61a302b57",
+	"X-RapidAPI-Host": "trueway-matrix.p.rapidapi.com"
+}
+
+response = requests.get(url, headers=headers, params=querystring)
+
+print(response.json())

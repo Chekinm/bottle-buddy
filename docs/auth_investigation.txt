@@ -1,0 +1,12 @@
+Начать с видоса что ничег вам не поможет.
+
+https://www.youtube.com/watch?v=pGNxoIoLt_Y
+
+https://www.youtube.com/watch?v=vq861XoZI9k
+
+https://habr.com/ru/articles/502702/
+
+110% djano with JWT
+Принять и простаить что лучший вариант ван домен бак анд фронт.
+
+https://hackernoon.com/110percent-complete-jwt-authentication-with-django-and-react-2020-iejq34ta

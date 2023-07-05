@@ -1,67 +1,50 @@
 import { useState, useEffect } from "react"
-import Cookies from 'js-cookie'
-import axios1 from '../api/axios'
-
+import axios from '../api/axios'
+import useRefreshJWTToken from "../hooks/useRefreshJWTToken"
+import useBlackListJWTCookies from "../hooks/useBlackListJWTCookies"
+import { useNavigate } from "react-router-dom"
 
 const Users = () => {
-    const [ users, setUsers ] = useState()
+    const [ users, setUsers ] = useState();
+    const refresh = useRefreshJWTToken();
+    const blacklist = useBlackListJWTCookies();
+    const navigate = useNavigate()
 
-    useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
+    // useEffect(() => {
+    //     let isMounted = true;
+    //     const controller = new AbortController();
 
-        const login = async () => {
-            try {
-                const response = await axios1.post('/api/token/', 
-                    
-                    JSON.stringify({"email":"a@a.com","password":"a"}),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            );
-            console.log('cookies', response.headres)
-            console.log(JSON.stringify(response?.data));    
-            console.log(response);
-            } catch (err) {
-                console.error(err);
-            }
-        }
+    //     const getUsers = async () => {
+    //         try {
+    //             const response = await axios1.get('/api/users/', {
+    //                 signal: controller.signal
+    //             });
+    //             console.log(response.data)
+    //             isMounted && setUsers(response.data)
+
+    //         } catch (err) {
+    //             console.error(err);
+    //         }
+    //     }
         
-        const getUsers = async () => {
-            try {
-                const response = await axios1.get('/api/users/', {
-                    signal: controller.signal
-                });
-                console.log(response.data)
-                isMounted && setUsers(response.data)
+    //     getUsers()
 
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        login()
-        // getUsers()
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        }        
-    },[]);
+    //     return () => {
+    //         isMounted = false;
+    //         controller.abort();
+    //     }        
+    // },[]);
     
     const onClick = () => {
         const getUsers = async () => {
             try {
-                const response = await axios1.get('/api/users/', {
+                const response = await axios.get('/api/users/', {
                     headers: { 
                         'Content-Type': 'application/json' 
                     },
                     withCredentials: true,
                 }
                 );
-                console.log('cookies2', Cookies.get())
-                console.log(response.data)
                 setUsers(response.data)
 
             } catch (err) {
@@ -76,13 +59,22 @@ const Users = () => {
     return (
         <article>
             <h2>users list</h2>
-            <button onClick={onClick}>GEt users</button>
+            <button onClick={onClick}>Get users</button>
             {users?.length
             ? (
                 <ul>
                     {users.map((users, i) => <li key = {i}>{users?.email}</li>)}
                 </ul>
             ) : <p>no users to display</p>}
+            <button onClick={() => refresh()}>Refresh</button>
+            <br />
+            <button onClick={() => blacklist()}>Sign Out</button>
+            <br />
+            
+            
+            <button onClick={() => navigate(-1)}>Go Back</button>
+
+
         </article>
   )
 }

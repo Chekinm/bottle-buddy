@@ -17,7 +17,7 @@ const CREATE_USER_URL = "/api/signup/"
 
 const Register = () => {
 
-    const inputActiveRef = useRef(null);
+    const inputFirstNameRef = useRef(null);
     const errRef = useRef(null);
 
     const [ firstName ,setFirstName ]  = useState('');
@@ -45,7 +45,7 @@ const Register = () => {
     const [ success, setSuccess ] = useState(false);
 
     useEffect(() => {
-        inputActiveRef.current.focus();
+        inputFirstNameRef.current.focus();
     },[]);
 
     useEffect(() => {
@@ -105,14 +105,12 @@ const Register = () => {
                 
                 setErrMsg ("No Server Response")
             } else {
+                setErrMsg ("Server response with error")
                 console.log(JSON.stringify(error.response))
             }  
             errRef.current.focus();
         }
     }
-
-  
-
 
     return (
         <>
@@ -139,7 +137,7 @@ const Register = () => {
                     <input
                         type="text"
                         id="firstName"
-                        ref={inputActiveRef}
+                        ref={inputFirstNameRef}
                         autoComplete="off"
                         onChange={(e) => setFirstName(e.target.value)}
                         value={firstName}
@@ -151,7 +149,7 @@ const Register = () => {
                     /> 
                     <p id="firstNamesNote" className={firstNameFocus && 
                                                             firstName && 
-                                                            !validFirstName ? "instruction" : "offscreen" }>
+                                                            !validFirstName ? "instructions" : "offscreen" }>
                         <FontAwesomeIcon icon={faCircleInfo} />
                         1 to 25 characters.<br />
                         Must begin with a letter.<br />
@@ -177,9 +175,9 @@ const Register = () => {
                         onFocus={() => setLastNameFocus(true)}
                         onBlur={() => setLastNameFocus(false)}
                     />
-                    <p id="lastNamesNote" className={lastNameFocus && !validLastName ? "instruction" : "offscreen" }>
+                    <p id="lastNamesNote" className={lastNameFocus && !validLastName ? "instructions" : "offscreen" }>
                         <FontAwesomeIcon icon={faCircleInfo} />
-                        1 to 25 characters.<br />
+                         1 to 25 characters.<br />
                         Must begin with a letter.<br />
                         Letters, numbers, underscores, hyphens allowed.
                     </p>
@@ -195,7 +193,7 @@ const Register = () => {
                     <input 
                         type="text"
                         id="email"
-                        autoComplete="on"  // check it later if it is usefull
+                        autoComplete="off"  // check it later if it is usefull
                         onChange={(e) => setEmail(e.target.value)}
                         value={email}
                         required
@@ -204,9 +202,9 @@ const Register = () => {
                         onFocus={() => setEmailFocus(true)}
                         onBlur={() => setEmailFocus(false)}
                     />
-                    <p id="emailNote" className={emailFocus && !validEmail ? "instruction" : "offscreen" }>
+                    <p id="emailNote" className={emailFocus && !validEmail ? "instructions" : "offscreen" }>
                         <FontAwesomeIcon icon={faCircleInfo} />
-                        Valid email address.<br />
+                         Enter valid email address.<br />
                         Up to 255 characters.
                     </p>
 
@@ -228,9 +226,9 @@ const Register = () => {
                         onFocus={() => setPwdFocus(true)}
                         onBlur={() => setPwdFocus(false)}
                     />
-                    <p id="pwdNote" className={pwdFocus && !validPwd ? "instruction" : "offscreen" }>
+                    <p id="pwdNote" className={pwdFocus && !validPwd ? "instructions" : "offscreen" }>
                         <FontAwesomeIcon icon={faCircleInfo} />
-                        8 to 24 characters.<br />
+                         8 to 24 characters.<br />
                         Must include uppercase and lowercase letters, a number and a special character.<br />
                         Allowed special characters: <span aria-label="exclamation mark">!</span> 
                                                     <span aria-label="at symbol">@</span> 
@@ -257,8 +255,8 @@ const Register = () => {
                         onFocus={() => setConfirmPwdFocus(true)}
                         onBlur={() => setConfirmPwdFocus(false)}
                     />
-                    <p id="confirmPwdNote" className={confirmPwdFocus && !validConfirmPwd ? "instruction" : "offscreen" }>
-                        <FontAwesomeIcon icon={faCircleInfo} />
+                    <p id="confirmPwdNote" className={confirmPwdFocus && !validConfirmPwd ? "instructions" : "offscreen" }>
+                        <FontAwesomeIcon icon={faCircleInfo}/>
                         Should be the same as first input.
                     </p>
 

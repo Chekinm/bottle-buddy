@@ -4,8 +4,8 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView,
                                             TokenVerifyView,
+                                            TokenBlacklistView,
                                             )
-from rest_framework_simplejwt.tokens import RefreshToken
 from .auth import CookieJWTAuthentication
 
 from rest_framework.permissions import (IsAuthenticated,
@@ -39,8 +39,17 @@ from .mixin import (UserOperationsMixin,
                     AddressOperationsMixin,
                     )
 
+from .serializers import (MyTokenObtainPairSerializer,
+                          CookieTokenRefreshSerializer,
+                          CookieTokenBlackListSerializer
+                          )
+
 
 class CreateUserAPI (UserOperationsMixin, GenericAPIView):
+    """
+    Special class, with only post method.
+    Allowed new user creates an account witout autentication
+    """
     authentication_classes = []
     permission_classes = (AllowAny,)
 
@@ -92,38 +101,38 @@ class AddressAPI(AddressOperationsMixin, GenericViewSet):
 # Token autorzaion API
 
 class CookieTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('access'):
-            response.set_cookie('access_token',
-                                response.data['access'],
-                                samesite='None',
-                                secure=True,
-                                httponly=True,
-                                )
-            response.set_cookie('refresh_token',
-                                response.data['refresh'],
-                                samesite='None',
-                                secure=True,
-                                httponly=True,
-                                )
+            response.set_cookie(
+                'access_token',
+                response.data['access'],
+                # samesite='none', #need to test this on production domains
+                # secure=True,
+                httponly=True,
+                )
+            response.set_cookie(
+                'refresh_token',
+                response.data['refresh'],
+                # samesite='None',
+                # secure=True,
+                httponly=True,
+                )
+            response.set_cookie(
+                'user_info_token',
+                f'{response.data["first_name"]} {response.data["last_name"]}',
+                # samesite='None',
+                # secure=True,
+                )
             del response.data['access']
             del response.data['refresh']
         return super().finalize_response(request, response, *args, **kwargs)
 
-    @staticmethod
-    def delete_cookie(response):
-        response.delete_cookie('access_token')
-
-    @staticmethod
-    def get_refresh_token(request):
-        refresh_token = request.data.get('refresh')
-        if refresh_token:
-            # something starange here??
-            return RefreshToken(refresh_token)
-        return None
-
 
 class CookieTokenRefreshView(TokenRefreshView):
+    serializer_class = CookieTokenRefreshSerializer
+
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('access'):
             response.set_cookie('access_token',
@@ -132,7 +141,15 @@ class CookieTokenRefreshView(TokenRefreshView):
                                 secure=True,
                                 httponly=True,
                                 )
+            response.set_cookie(
+                'refresh_token',
+                response.data['refresh'],
+                # samesite='None',
+                # secure=True,
+                httponly=True,
+                )
             del response.data['access']
+            del response.data['refresh']
         return super().finalize_response(request, response, *args, **kwargs)
 
 
@@ -142,3 +159,33 @@ class CookieTokenVerifyView(TokenVerifyView):
         serializer = self.get_serializer(data={'token': token})
         serializer.is_valid(raise_exception=True)
         return Response({'detail': 'Token is valid'})
+
+
+class CookieTokenBlacklistView(TokenBlacklistView):
+    authentication_classes = [CookieJWTAuthentication, ]
+    permission_classes = (IsAuthenticated, )
+
+    serializer_class = CookieTokenBlackListSerializer
+
+    def finalize_response(self, request, response, *args, **kwargs):
+        print('from blacklisted', response.data)
+        response.set_cookie('access_token',
+                            'cookie_was_blacklisted',
+                            samesite='None',
+                            secure=True,
+                            httponly=True,
+                            )
+        response.set_cookie(
+                'refresh_token',
+                'cookie_was_blacklisted',
+                # samesite='None',
+                # secure=True,
+                httponly=True,
+                )
+        response.set_cookie(
+                'user_info_token',
+                'cookie_was_blacklisted',
+                # samesite='None',
+                # secure=True,
+                )
+        return super().finalize_response(request, response, *args, **kwargs)
