@@ -92,8 +92,6 @@ const Register = () => {
                     withCredentials: true
                 }
             );
-            console.log(response?.data);
-            console.log(JSON.stringify(response));
             setSuccess(true);
             setFirstName('');
             setLastName('');
@@ -106,7 +104,6 @@ const Register = () => {
                 setErrMsg ("No Server Response")
             } else {
                 setErrMsg ("Server response with error")
-                console.log(JSON.stringify(error.response))
             }  
             errRef.current.focus();
         }

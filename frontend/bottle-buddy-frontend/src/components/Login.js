@@ -32,7 +32,6 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(email, pwd);
 
         try {
             const response = await axios.post(AUTRHORISATION_URL, 
@@ -52,8 +51,12 @@ const Login = () => {
                 if (!error?.response) {
                     setErrMsg ("No Server Response")
                 } else {
-                    setErrMsg ("Server response with error")
-                    console.log(JSON.stringify(error.response))
+                    const errorObj = error.response
+                    console.log(JSON.stringify(errorObj.data.detail))
+                    setErrMsg (errorObj.status === 401 
+                        ? JSON.stringify(errorObj.data.detail)
+                        : ("Server error"))
+                    console.log(errorObj.status === 401)
                 }  
                 errRef.current.focus();
             }        
