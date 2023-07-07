@@ -1,5 +1,5 @@
 import axios from 'axios';
-const  BASE_URL = 'https://bottle-buddy.onrender.com/'; //'http://127.0.0.1:8000/'
+const  BASE_URL =  process.env.REACT_APP_BASE_URL_ENV//'https://bottle-buddy.onrender.com/';//;'http://127.0.0.1:8000/'
 
 
 export default axios.create({
