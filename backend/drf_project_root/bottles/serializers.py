@@ -1,17 +1,17 @@
 from .models import (User, Address, Supplier, Collector,
                      TypeOfGoods, Order, RecyclePoint)
 from rest_framework import serializers
-
-
 from rest_framework_simplejwt.serializers import (TokenObtainPairSerializer,
                                                   TokenRefreshSerializer,
                                                   TokenBlacklistSerializer,
                                                   )
 from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    """custom serializer add user e-mail and user name to fronend in access token"""
+    """custom serializer add user e-mail and user name
+    to frontend in access token"""
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -27,7 +27,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             "last_name": self.user.last_name,
             "user_id": self.user.id,
             "email": self.user.email,
-            # "permissions": self.user.user_permissions.values_list("codename", flat=True),
+            # "permissions": self.user.user_permissions.values_list("codename",
+            #                                                        flat=True),
             # "groups": self.user.groups.values_list("name", flat=True),
             **attrs,
         }
@@ -40,9 +41,20 @@ class CookieTokenRefreshSerializer(TokenRefreshSerializer):
 
     def validate(self, attrs):
         attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
+        # invoke user_id form token to send it back with details
+        refresh_token = RefreshToken(attrs['refresh'])
+        user_id = refresh_token['user_id']
+        user_details = User.objects.get(id=user_id)
+
         if attrs['refresh']:
-            
-            return super().validate(attrs)
+            attrs = super().validate(attrs)
+            return {
+                    "first_name": user_details.first_name,
+                    "last_name": user_details.last_name,
+                    "user_id": user_id,
+                    "email": user_details.email,
+                    **attrs,
+                    }
         else:
             raise InvalidToken(
                 'No valid token found in cookie \'refresh_token\''
@@ -50,8 +62,9 @@ class CookieTokenRefreshSerializer(TokenRefreshSerializer):
 
 
 class CookieTokenBlackListSerializer(TokenBlacklistSerializer):
-    """modified TokenBlackLIstSerializer class to get refresh_roken from request
-    cookies and validate it and blacklist it"""
+    """modified TokenBlackLIstSerializer class to get
+       refresh_roken from request
+       cookies and validate it and blacklist it"""
     refresh = None
 
     def validate(self, attrs):

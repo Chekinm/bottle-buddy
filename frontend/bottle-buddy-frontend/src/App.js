@@ -8,6 +8,7 @@ import Layout from './components/Layout';
 import Missing from './components/Missing';
 import Home from './components/Home';
 import RequireAuth from './components/RequireAuth';
+import StayLoggedIn from './components/StayLoggedIn';
 import { Route, Routes } from 'react-router-dom';
 
 
@@ -22,11 +23,12 @@ function App() {
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* we want to protect these routes */}
-        <Route element={<RequireAuth />}>
-          <Route path="/" element={<Home />} />
-          <Route path="users" element={<Users />} />
+        <Route element={<StayLoggedIn />}> 
+          <Route element={<RequireAuth />}>
+            <Route path="/" element={<Home />} />
+            <Route path="users" element={<Users />} />
+          </Route>
         </Route>
-
         <Route path="*" element={<Missing />} />
 
 

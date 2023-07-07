@@ -1,44 +1,48 @@
 import { useState, useEffect } from "react"
-import axios from '../api/axios'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
+
 import useRefreshJWTToken from "../hooks/useRefreshJWTToken"
 import useBlackListJWTCookies from "../hooks/useBlackListJWTCookies"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Users = () => {
     const [ users, setUsers ] = useState();
+    const axiosPrivate = useAxiosPrivate()
+
+
     const refresh = useRefreshJWTToken();
-    const blacklist = useBlackListJWTCookies();
+    const blacklistJWTToken = useBlackListJWTCookies();
     const navigate = useNavigate()
+    const location = useLocation();
 
-    // useEffect(() => {
-    //     let isMounted = true;
-    //     const controller = new AbortController();
+    useEffect(() => {
+        let isMounted = true;
+        const controller = new AbortController();
 
-    //     const getUsers = async () => {
-    //         try {
-    //             const response = await axios1.get('/api/users/', {
-    //                 signal: controller.signal
-    //             });
-    //             console.log(response.data)
-    //             isMounted && setUsers(response.data)
-
-    //         } catch (err) {
-    //             console.error(err);
-    //         }
-    //     }
+        const getUsers = async () => {
+            try {
+                const response = await axiosPrivate.get('/api/users/', {
+                    signal: controller.signal
+                });
+                isMounted && setUsers(response.data)
+            } catch (err) {
+                console.error(err);
+                // navigate('/login', { state: { from: location }, replace: true });
+            }
+        }
         
-    //     getUsers()
+        getUsers()
 
-    //     return () => {
-    //         isMounted = false;
-    //         controller.abort();
-    //     }        
-    // },[]);
+        return () => {
+            isMounted = false;
+            controller.abort();
+        }        
+    },[]);
     
     const onClick = () => {
         const getUsers = async () => {
             try {
-                const response = await axios.get('/api/users/', {
+                const response = await axiosPrivate.get('/api/users/', {
                     headers: { 
                         'Content-Type': 'application/json' 
                     },
@@ -48,7 +52,8 @@ const Users = () => {
                 setUsers(response.data)
 
             } catch (err) {
-                console.error(err);
+                console.error(`Refresh token expired \n ${err}`);
+                navigate('/login', { state: { from: location }, replace: true });
             }
         }
         getUsers()
@@ -68,7 +73,9 @@ const Users = () => {
             ) : <p>no users to display</p>}
             <button onClick={() => refresh()}>Refresh</button>
             <br />
-            <button onClick={() => blacklist()}>Sign Out</button>
+            <div className="flexGrow">
+                <button onClick={() => blacklistJWTToken()}>Sign Out</button>
+            </div>
             <br />
             
             

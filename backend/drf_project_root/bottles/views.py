@@ -108,7 +108,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
             response.set_cookie(
                 'access_token',
                 response.data['access'],
-                samesite='none', #need to test this on production domains
+                samesite='none',  # need to test this on production domains
                 secure=True,
                 httponly=True,
                 )

@@ -90,26 +90,26 @@ WSGI_APPLICATION = 'bottle_buddy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config('DJANGO_DB_NAME'),
-#         'USER': config('DJANGO_DB_USER'),
-#         'PASSWORD': config('DJANGO_DB_PASSWORD'),
-#         'HOST': config('DJANGO_DB_HOST'),
-#         'PORT': config('DJANGO_DB_PORT'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DJANGO_DB_NAME'),
+        'USER': config('DJANGO_DB_USER'),
+        'PASSWORD': config('DJANGO_DB_PASSWORD'),
+        'HOST': config('DJANGO_DB_HOST'),
+        'PORT': config('DJANGO_DB_PORT'),
+    }
+}
 # DATABASES_LOCAL if 'RENDER' not in os.environ else
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=('postgres://dbuser:0oH6faqUbSUUb9EoNnr2Y6agGH14uaUj@'
-                 'dpg-cie33q98g3n4p2rb8bsg-a/bottle_buddy_db'),
-        conn_max_age=600,
-        conn_health_checks=True,
-     ),
-    }
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=('postgres://dbuser:0oH6faqUbSUUb9EoNnr2Y6agGH14uaUj@'
+#                  'dpg-cie33q98g3n4p2rb8bsg-a/bottle_buddy_db'),
+#         conn_max_age=600,
+#         conn_health_checks=True,
+#      ),
+#     }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -161,8 +161,8 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=28),
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(seconds=20),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": True,
@@ -193,7 +193,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 
     "TOKEN_OBTAIN_SERIALIZER": "bottles.serializers.MyTokenObtainPairSerializer",  # updated to include email and user to token
-    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.CookieTokenRefreshSerializer",
     "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",

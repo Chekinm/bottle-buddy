@@ -9,7 +9,7 @@ const AUTRHORISATION_URL = "/api/token/";
 
 const Login = () => {
 
-    const { auth, setAuth } = useAuth();
+    const { setAuth, stayLoggedIn, setStayLoggedIn } = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -56,11 +56,18 @@ const Login = () => {
                     setErrMsg (errorObj.status === 401 
                         ? JSON.stringify(errorObj.data.detail)
                         : ("Server error"))
-                    console.log(errorObj.status === 401)
                 }  
                 errRef.current.focus();
             }        
     } 
+
+    const toggleStayLoggedIn = () => {
+        setStayLoggedIn(prev => !prev)
+    }
+
+    useEffect (() => {
+        localStorage.setItem("stayLoggedIn", stayLoggedIn )
+    },[stayLoggedIn])
 
     return (
         <section>
@@ -80,7 +87,7 @@ const Login = () => {
 
                 <label htmlFor="password">Password:</label>
                 <input 
-                    type="text"
+                    type="password"
                     id="password"
                     autoComplete="off"
                     onChange={(e) => setPwd(e.target.value)}
@@ -89,11 +96,20 @@ const Login = () => {
                 />
                 {}
                 <button>Sign In</button>
+                <div className="persistCheck">
+                    <input
+                        type="checkbox"
+                        id="stayLoggedIn"
+                        onChange={toggleStayLoggedIn}
+                        checked={stayLoggedIn}
+                    />
+                    <label htmlFor="stayLoggedIn">Stay logged in</label>
+                </div>
             </form>
             <p>
-                Not yet regieter?
+                Not yet with us? 
                 <span className="line">
-                    <Link to="/register">Register</Link>
+                    <Link to="/register">Join!</Link>
                 </span>
             </p>
         </section>
