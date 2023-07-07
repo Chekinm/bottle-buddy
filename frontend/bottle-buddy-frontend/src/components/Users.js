@@ -8,8 +8,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 const Users = () => {
     const [ users, setUsers ] = useState();
     const axiosPrivate = useAxiosPrivate()
-
-
     const refresh = useRefreshJWTToken();
     const blacklistJWTToken = useBlackListJWTCookies();
     const navigate = useNavigate()
@@ -26,7 +24,7 @@ const Users = () => {
                 });
                 isMounted && setUsers(response.data)
             } catch (err) {
-                console.error(err);
+                console.error('unmount', err);
                 // navigate('/login', { state: { from: location }, replace: true });
             }
         }
@@ -37,7 +35,7 @@ const Users = () => {
             isMounted = false;
             controller.abort();
         }        
-    },[]);
+    }, []);
     
     const onClick = () => {
         const getUsers = async () => {
@@ -53,7 +51,7 @@ const Users = () => {
 
             } catch (err) {
                 console.error(`Refresh token expired \n ${err}`);
-                navigate('/login', { state: { from: location }, replace: true });
+                // navigate('/login', { state: { from: location }, replace: true });
             }
         }
         getUsers()
@@ -64,23 +62,23 @@ const Users = () => {
     return (
         <article>
             <h2>users list</h2>
-            <button onClick={onClick}>Get users</button>
+            <button onClick={onClick}> Get users </button>
             {users?.length
             ? (
                 <ul>
                     {users.map((users, i) => <li key = {i}>{users?.email}</li>)}
                 </ul>
             ) : <p>no users to display</p>}
-            <button onClick={() => refresh()}>Refresh</button>
+            <button onClick={() => refresh()}> Refresh </button>
             <br />
             <div className="flexGrow">
-                <button onClick={() => blacklistJWTToken()}>Sign Out</button>
+                <button onClick={() => blacklistJWTToken()}> Sign Out </button>
             </div>
             <br />
             
-            
-            <button onClick={() => navigate(-1)}>Go Back</button>
-
+            <div className="flexGrow">
+                <button onClick={() => navigate(-1)}>Go Back</button>
+            </div>
 
         </article>
   )
