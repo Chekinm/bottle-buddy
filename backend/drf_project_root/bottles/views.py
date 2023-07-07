@@ -168,7 +168,6 @@ class CookieTokenBlacklistView(TokenBlacklistView):
     serializer_class = CookieTokenBlackListSerializer
 
     def finalize_response(self, request, response, *args, **kwargs):
-        print('from blacklisted', response.data)
         response.set_cookie('access_token',
                             'cookie_was_blacklisted',
                             samesite='None',

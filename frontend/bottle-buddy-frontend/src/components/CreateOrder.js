@@ -4,7 +4,7 @@ import useRefreshJWTToken from "../hooks/useRefreshJWTToken"
 import useBlackListJWTCookies from "../hooks/useBlackListJWTCookies"
 import { useNavigate } from "react-router-dom"
 
-const Users = () => {
+const CreateOrder = () => {
     const [ users, setUsers ] = useState();
     const refresh = useRefreshJWTToken();
     const blacklist = useBlackListJWTCookies();
@@ -58,7 +58,7 @@ const Users = () => {
 
     return (
         <section>
-            <h1>users list</h1>
+            <h2>users list</h2>
             <button onClick={onClick}>Get users</button>
             {users?.length
             ? (
@@ -79,4 +79,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default CreateOrder
