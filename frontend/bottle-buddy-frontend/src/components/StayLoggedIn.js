@@ -21,7 +21,7 @@ const StayLoggedIn = () => {
                 setIsWaitingForLogin(false)
             }       
         }
-        !auth?.email ? sendRefreshToken() : setIsWaitingForLogin(false)
+        !auth?.email && stayLoggedIn ? sendRefreshToken() : setIsWaitingForLogin(false)
     }, [])
 
     return (

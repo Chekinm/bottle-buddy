@@ -142,12 +142,12 @@ class CookieTokenRefreshView(TokenRefreshView):
                                 httponly=True,
                                 )
             response.set_cookie(
-                'refresh_token',
-                response.data['refresh'],
-                # samesite='None',
-                # secure=True,
-                httponly=True,
-                )
+                                'refresh_token',
+                                response.data['refresh'],
+                                samesite='None',
+                                secure=True,
+                                httponly=True,
+                                )
             del response.data['access']
             del response.data['refresh']
         return super().finalize_response(request, response, *args, **kwargs)

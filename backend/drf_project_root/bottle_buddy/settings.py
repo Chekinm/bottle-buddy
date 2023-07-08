@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "234234233454jhksjdhfFDFsd234234234")
 
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bottle-buddy-front.onrender.com', '127.0.0.1']
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
