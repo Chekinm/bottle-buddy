@@ -1,34 +1,22 @@
 import { useNavigate, Link } from "react-router-dom";
-// import { useContext } from "react";
-// import AuthContext from "../context/AuthProvider";
 import useAuth from "../hooks/useAuth";
 
 const Home = () => {
     const { auth, setAuth } = useAuth();
     const navigate = useNavigate();
 
-    const logout = async () => {
-        // if used in more components, this should be in context 
-        // axios to /logout endpoint 
-        setAuth({});
-        navigate('/linkpage');
-    }
-
     return (
-        <section>
-            <h1>Home</h1>
-            <br />
-            <p>Hello {auth.first_name} {auth.last_name} </p>
-            <p>You are logged in!</p>
+        <div className="container-fluid text-center">
+            <div className="row">
+                <div className="col">
+                    <div className='main-text fs-1'>Hello {auth.first_name} {auth.last_name}</div>
+                    <div className='main-text fs-3'>How would you like to save the world today?</div>
 
-            <br />
-            <Link to="/users">Go to the Users page</Link>
-            
-            <Link to="/linkpage">Go to the link page</Link>
-            <div className="flexGrow">
-                <button onClick={logout}>Sign Out</button>
+                    <Link to="/map" className="btn btn-info btn-lg m-3">Have some used bottles to recycled, but have no time? <br /> Tell us where to go to help you!</Link>
+                    <Link to="/linkpage" className="btn btn-success btn-lg m-3">Would you like to help others send their stuff to the recycling center? <br /> Check what we have around you.</Link>
+                </div>
             </div>
-        </section>
+        </div>
     )
 }
 

@@ -74,8 +74,9 @@ const Login = () => {
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Sign In</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Email:</label>
+                <label htmlFor="email" className="form-input">Email:</label>
                 <input 
+                    className="form-input"
                     type="text"
                     id="email"
                     ref={inputEmailRef}
@@ -85,8 +86,9 @@ const Login = () => {
                     required
                 />
 
-                <label htmlFor="password">Password:</label>
+                <label htmlFor="password" className="form-input">Password:</label>
                 <input 
+                    className="form-input"
                     type="password"
                     id="password"
                     autoComplete="off"
@@ -95,7 +97,7 @@ const Login = () => {
                     required
                 />
                 {}
-                <button>Sign In</button>
+                <button className="form-input">Sign In</button>
                 <div className="persistCheck">
                     <input
                         type="checkbox"
@@ -103,10 +105,10 @@ const Login = () => {
                         onChange={toggleStayLoggedIn}
                         checked={stayLoggedIn}
                     />
-                    <label htmlFor="stayLoggedIn">Stay logged in</label>
+                    <label htmlFor="stayLoggedIn" className="form-input">Stay logged in</label>
                 </div>
             </form>
-            <p>
+            <p className='text-white'>
                 Not yet with us? 
                 <span className="line">
                     <Link to="/register">Join!</Link>

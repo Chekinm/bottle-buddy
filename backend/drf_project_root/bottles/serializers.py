@@ -1,4 +1,4 @@
-from .models import (User, Address, Supplier, Collector,
+from .models import (User, Rating,
                      TypeOfGoods, Order, RecyclePoint)
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import (TokenObtainPairSerializer,
@@ -68,7 +68,6 @@ class CookieTokenBlackListSerializer(TokenBlacklistSerializer):
     refresh = None
 
     def validate(self, attrs):
-        print('we are in black list serializer', attrs)
         attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
         if attrs['refresh']:
             # parents validate will validate and blacklist our token
@@ -102,24 +101,10 @@ class UserSerializer(serializers.ModelSerializer):
         return isinstance
 
 
-class AddressSerializer (serializers.ModelSerializer):
+class RatingSerializer (serializers.ModelSerializer):
 
     class Meta:
-        model = Address
-        fields = '__all__'
-
-
-class SupplierSerializer (serializers.ModelSerializer):
-
-    class Meta:
-        model = Supplier
-        fields = '__all__'
-
-
-class CollectorSerializer (serializers.ModelSerializer):
-
-    class Meta:
-        model = Collector
+        model = Rating
         fields = '__all__'
 
 

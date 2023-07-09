@@ -13,6 +13,13 @@ const Users = () => {
     const navigate = useNavigate()
     const location = useLocation();
 
+
+    const logout = async () => {
+        // if used in more components, this should be in context 
+        blacklistJWTToken()
+        navigate('/home');
+    }
+
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();

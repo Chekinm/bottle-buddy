@@ -1,11 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
 
 function Layout() {
+
   return (
-    <main>
-        <Outlet />
-    </main>
-  )
+    <div className="home-container" >
+      <Navbar />
+      <Outlet className="inside-container" />
+    </div>
+  );
 }
 
-export default Layout
+export default Layout;

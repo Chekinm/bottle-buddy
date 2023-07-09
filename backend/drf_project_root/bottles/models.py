@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 # from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.base_user import BaseUserManager
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class UserManager(BaseUserManager):
@@ -59,40 +60,14 @@ class User(AbstractUser):
 # ------------------ regular modles part ---------------------------
 
 
-class Address(models.Model):
-    """general table, represent all addresses somewhen entered into DB"""
-
-    appartment = models.CharField(max_length=50)
-    house = models.CharField(max_length=50)
-    street = models.CharField(max_length=250)
-    city = models.CharField(max_length=150)
-    country = models.CharField(max_length=150)
-    postal_code = models.CharField(max_length=50)
-    longitude = models.FloatField()
-    latitude = models.FloatField()
-
-    def __str__(self):
-        return (f'{self.street}, {self.house}'
-                f'{"-"+self.appartment if self.appartment else ""}\n'
-                f'{self.postal_code}, {self.country}, {self.city}')
-
-
-class Supplier(models.Model):
+class Rating(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
     supplier_rating = models.FloatField()
-
-    def __str__(self):
-        return f'{self.user_id} rating is {self.supplier_rating}'
-
-
-class Collector (models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
     collector_rating = models.FloatField()
-    latitude = models.FloatField()
-    longitude = models.FloatField()
 
     def __str__(self):
-        return f'{self.user_id} rating is {self.collector_rating}'
+        return (f'{self.user_id} supplier rating is {self.supplier_rating}' +
+                f' collector rating is {self.collector_rating}')
 
 
 class TypeOfGoods (models.Model):
@@ -103,32 +78,78 @@ class TypeOfGoods (models.Model):
 
 
 class Order (models.Model):
-    supplier = models.ForeignKey("Supplier",
+    supplier = models.ForeignKey("User",
                                  on_delete=models.CASCADE,
                                  related_name="orders",
                                  blank=False)
-    collector = models.ForeignKey("Collector",
-                                  on_delete=models.CASCADE,
+    collector = models.ForeignKey("User",
+                                  on_delete=models.SET_NULL,
                                   related_name="orderds",
-                                  blank=True)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=False)
+                                  blank=True,
+                                  null=True)
+    latitude = models.FloatField(
+        default=0.0,
+        validators=[
+            MinValueValidator(-90.0),  # Minimum value constraint
+            MaxValueValidator(90.0)  # Maximum value constraint
+        ]
+    )
+    longitude = models.FloatField(
+        default=0.0,
+        validators=[
+            MinValueValidator(0.0),  # Minimum value constraint
+            MaxValueValidator(180.0)  # Maximum value constraint
+        ]
+    )
+    house_number = models.CharField(max_length=10, blank=True)
+    entrance_number = models.CharField(max_length=10, blank=True)
+    floor = models.CharField(max_length=10, blank=True)
+    apparment_number = models.CharField(max_length=10, blank=True)
+    comments = models.CharField(max_length=1000, blank=True)
+
     creation_date = models.DateTimeField(auto_now_add=True)
-    is_assigned = models.BooleanField(default=False)
-    is_taken = models.BooleanField(default=False)
-    is_done = models.BooleanField(default=False)
+
+    class Status(models.IntegerChoices):
+        IS_OPEN = 1
+        IS_ASSIGNED = 2
+        IS_TAKEN = 3
+        IS_DONE = 4
+    status = models.IntegerField(choices=Status.choices, default=1)
+
     type_of_goods = models.ForeignKey(TypeOfGoods,
                                       on_delete=models.CASCADE,
                                       related_name="orders")
     amount = models.IntegerField()
 
     def __str__(self):
-        return f'{self.amount} {self.type_of_goods} taken - {self.is_taken}'
+        return f'{self.amount} {self.type_of_goods} status - {self.status}'
 
 
 class RecyclePoint(models.Model):
 
     name = models.CharField(max_length=250)
-    address = models.ForeignKey("Address", on_delete=models.CASCADE)
+    # made address section similar to orders to probably
+    # make an address table different
+    latitude = models.FloatField(
+        default=0.0,
+        validators=[
+            MinValueValidator(-90.0),  # Minimum value constraint
+            MaxValueValidator(90.0)  # Maximum value constraint
+        ]
+    )
+    longitude = models.FloatField(
+        default=0.0,
+        validators=[
+            MinValueValidator(0.0),  # Minimum value constraint
+            MaxValueValidator(180.0)  # Maximum value constraint
+        ]
+    )
+    house_number = models.CharField(max_length=10, blank=True)
+    entrance_number = models.CharField(max_length=10, blank=True)
+    floor = models.CharField(max_length=10, blank=True)
+    apparment_number = models.CharField(max_length=10, blank=True)
+    comments = models.CharField(max_length=1000, blank=True)
+
     open_time = models.TimeField()
     close_time = models.TimeField()
     types_of_goods = models.ManyToManyField(TypeOfGoods, related_name="points")

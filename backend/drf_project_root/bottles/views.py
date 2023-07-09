@@ -31,18 +31,22 @@ from rest_framework.permissions import (IsAuthenticated,
 #                      )
 
 from .mixin import (UserOperationsMixin,
-                    SupplierOperationsMixin,
-                    CollectorOperationsMixin,
+                    RatingOperationsMixin,
                     OrderOperationsMixin,
                     TypeOfGoodsOperationsMixin,
                     RecyclePointOperationsMixin,
-                    AddressOperationsMixin,
+                    FilteredOrderOperationsMixin,
                     )
 
 from .serializers import (MyTokenObtainPairSerializer,
                           CookieTokenRefreshSerializer,
                           CookieTokenBlackListSerializer
                           )
+
+# as we deployed to different domain we need to set samesite to 'none'
+COOKIES_SET_SAME_SITE = 'none'
+COOKIES_SET_SECURE = True
+COOKIES_SET_HTTPONLY = True
 
 
 class CreateUserAPI (UserOperationsMixin, GenericAPIView):
@@ -63,22 +67,24 @@ class ListUserAPI (UserOperationsMixin, GenericViewSet):
     pass
 
 
-class SupplierAPI(SupplierOperationsMixin, GenericViewSet):
-    authentication_classes = [CookieJWTAuthentication, ]
-    permission_classes = (IsAuthenticated,)
-    pass
-
-
-class CollectorAPI(CollectorOperationsMixin, GenericViewSet):
+class RatingAPI(RatingOperationsMixin, GenericViewSet):
     authentication_classes = [CookieJWTAuthentication, ]
     permission_classes = (IsAuthenticated,)
     pass
 
 
 class OrderAPI(OrderOperationsMixin, GenericViewSet):
+    authentication_classes = []
+    permission_classes = (AllowAny,)
+    pass
+
+
+class FilteredOrderAPI(FilteredOrderOperationsMixin, GenericViewSet):
     authentication_classes = [CookieJWTAuthentication, ]
     permission_classes = (IsAuthenticated,)
     pass
+
+
 
 
 class TypeOfGoodsAPI(TypeOfGoodsOperationsMixin, GenericViewSet):
@@ -92,13 +98,8 @@ class RecyclePointAPI(RecyclePointOperationsMixin, GenericViewSet):
     permission_classes = (IsAuthenticated,)
     pass
 
-
-class AddressAPI(AddressOperationsMixin, GenericViewSet):
-    authentication_classes = [CookieJWTAuthentication, ]
-    permission_classes = (IsAuthenticated,)
-
-
 # Token autorzaion API
+
 
 class CookieTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -108,22 +109,22 @@ class CookieTokenObtainPairView(TokenObtainPairView):
             response.set_cookie(
                 'access_token',
                 response.data['access'],
-                samesite='none',  # need to test this on production domains
-                secure=True,
-                httponly=True,
+                samesite=COOKIES_SET_SAME_SITE,
+                secure=COOKIES_SET_SECURE,
+                httponly=COOKIES_SET_HTTPONLY,
                 )
             response.set_cookie(
                 'refresh_token',
                 response.data['refresh'],
-                samesite='None',
-                secure=True,
-                httponly=True,
+                samesite=COOKIES_SET_SAME_SITE,
+                secure=COOKIES_SET_SECURE,
+                httponly=COOKIES_SET_HTTPONLY,
                 )
             response.set_cookie(
                 'user_info_token',
                 f'{response.data["first_name"]} {response.data["last_name"]}',
-                samesite='None',
-                secure=True,
+                samesite=COOKIES_SET_SAME_SITE,
+                secure=COOKIES_SET_SECURE,
                 )
             del response.data['access']
             del response.data['refresh']
@@ -137,16 +138,16 @@ class CookieTokenRefreshView(TokenRefreshView):
         if response.data.get('access'):
             response.set_cookie('access_token',
                                 response.data['access'],
-                                samesite='None',
-                                secure=True,
-                                httponly=True,
+                                samesite=COOKIES_SET_SAME_SITE,
+                                secure=COOKIES_SET_SECURE,
+                                httponly=COOKIES_SET_HTTPONLY,
                                 )
             response.set_cookie(
                                 'refresh_token',
                                 response.data['refresh'],
-                                samesite='None',
-                                secure=True,
-                                httponly=True,
+                                samesite=COOKIES_SET_SAME_SITE,
+                                secure=COOKIES_SET_SECURE,
+                                httponly=COOKIES_SET_HTTPONLY,
                                 )
             del response.data['access']
             del response.data['refresh']
@@ -171,21 +172,19 @@ class CookieTokenBlacklistView(TokenBlacklistView):
         print('from blacklisted', response.data)
         response.set_cookie('access_token',
                             'cookie_was_blacklisted',
-                            samesite='None',
-                            secure=True,
-                            httponly=True,
+                            samesite=COOKIES_SET_SAME_SITE,
+                            secure=COOKIES_SET_SECURE,
+                            httponly=COOKIES_SET_HTTPONLY,
                             )
         response.set_cookie(
                 'refresh_token',
                 'cookie_was_blacklisted',
-                # samesite='None',
-                # secure=True,
-                httponly=True,
+                samesite=COOKIES_SET_SAME_SITE,
+                secure=COOKIES_SET_SECURE,
+                httponly=COOKIES_SET_HTTPONLY,
                 )
         response.set_cookie(
                 'user_info_token',
                 'cookie_was_blacklisted',
-                # samesite='None',
-                # secure=True,
                 )
         return super().finalize_response(request, response, *args, **kwargs)
