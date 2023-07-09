@@ -14,6 +14,8 @@ const LinkPage = () => {
             <Link to="/">Home</Link>
             <Link to="/users">Users Page</Link>
             <Link to="/ordercreated">My Orders</Link>
+            <Link to="/collectorpage">Collectors page</Link>v
+            collectorpage
 
         </section>
     )

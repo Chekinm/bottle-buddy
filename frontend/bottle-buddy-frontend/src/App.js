@@ -13,6 +13,7 @@ import StayLoggedIn from './components/StayLoggedIn';
 import CreateOrder from './components/CreateOrder'
 import OrderCreated from './components/OrderCreated';
 import { Route, Routes } from 'react-router-dom';
+import CollectorMainPage from './components/CollectorMainPage';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Route path="users" element={<Users />} />
             <Route path="createorder" element={<CreateOrder />} />
             <Route path="ordercreated" element={<OrderCreated />} />
+            <Route path="collectorpage" element={<CollectorMainPage />} />
           </Route>
         </Route>
         <Route path="*" element={<Missing />} />
