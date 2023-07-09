@@ -299,7 +299,7 @@ const CreateOrder = () => {
                     Create order
                 </button>
             </form>
-            <div ref={mapContainer} className="map-container" />
+            <div ref={mapContainer} className="map-container-create" />
         </section>
     );
 }

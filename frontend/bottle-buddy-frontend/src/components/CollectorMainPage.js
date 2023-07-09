@@ -184,7 +184,7 @@ const CollectorMainPage = () => {
     return (
         <section>
             <h2 className='text-white'> Let's pick some orders</h2>
-            <div ref={mapContainer} className="map-container" />
+            <div ref={mapContainer} className="map-container-collect" />
         </section>
     );
 }
