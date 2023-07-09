@@ -85,8 +85,6 @@ class FilteredOrderAPI(FilteredOrderOperationsMixin, GenericViewSet):
     pass
 
 
-
-
 class TypeOfGoodsAPI(TypeOfGoodsOperationsMixin, GenericViewSet):
     authentication_classes = [CookieJWTAuthentication, ]
     permission_classes = (IsAuthenticated,)

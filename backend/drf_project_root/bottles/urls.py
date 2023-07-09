@@ -20,7 +20,7 @@ urlpatterns = [
           ),
 
      path('typeofgoods/',
-          TypeOfGoodsAPI.as_view({'get': 'list'}),
+          TypeOfGoodsAPI.as_view({'get': 'list', 'post': 'create'}),
           name='typeofgoods',
           ),
 
