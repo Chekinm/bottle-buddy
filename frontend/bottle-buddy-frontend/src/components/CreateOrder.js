@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate, Link } from "react-router-dom";
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import './map.css';
@@ -16,43 +17,44 @@ const REQUIRED_ONLY_NUMBER = /^[0-9-_]{1,10}$/;
 const CREATE_ORDER_URL="/api/createorder/"
 
 
-const Map = () => {
+const CreateOrder = () => {
     //validation shoould be added to this form
 
     
     // const inputSearchAdress = useRef(null);
     const errRef = useRef(null);
-    const {auth} = useAuth()
-    const [err, setErr] = useState()
+    const {auth} = useAuth();
+    const [err, setErr] = useState();
+    const navigate = useNavigate();
 
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [lng, setLng] = useState(34.8);
     const [lat, setLat] = useState(32.0);
     const [zoom, setZoom] = useState(9);
-    const [address, setAddress] = useState('')
+    const [address, setAddress] = useState('');
 
-    const [appNumber, setAppNumber] = useState('')
-    const [validAppNumber, setValidAppNumber] = useState('')
+    const [appNumber, setAppNumber] = useState('');
+    const [validAppNumber, setValidAppNumber] = useState('');
 
-    const [houseNumber, setHouseNumber] = useState('')
-    const [validHouseNumber, setValidHouseNumber] = useState('')
+    const [houseNumber, setHouseNumber] = useState('');
+    const [validHouseNumber, setValidHouseNumber] = useState('');
 
-    const [floor, setFloor] = useState('')
-    const [validFloor, setValidFloor] = useState('')
+    const [floor, setFloor] = useState('');
+    const [validFloor, setValidFloor] = useState('');
 
-    const [entrance, setEntrance] = useState('')
-    const [validEntrance, setValidEntrance] = useState('')
+    const [entrance, setEntrance] = useState('');
+    const [validEntrance, setValidEntrance] = useState('');
 
 
-    const [comment, setComment] = useState('')
-    const [validComment, setValidComment] = useState('')
+    const [comment, setComment] = useState('');
+    const [validComment, setValidComment] = useState('');
 
     const [numberOfBottle, setNumberOfBottle] = useState('')
-    const [validNumberOfBottle, setValidNumberOfBottle] = useState('')
+    const [validNumberOfBottle, setValidNumberOfBottle] = useState('');
     
-    const [orderLat, setOrderLat] = useState('')
-    const [orderLng, setOrderLng] = useState('')
+    const [orderLat, setOrderLat] = useState('');
+    const [orderLng, setOrderLng] = useState('');
     
     useEffect(() => {
         setValidAppNumber(NUMBER_REGEX.test(appNumber));
@@ -155,8 +157,7 @@ const Map = () => {
         });
     });
 
-
-    /////////////////////////////////////////////////////////////////////
+    ////// this part is submiting create order to database//
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -193,7 +194,6 @@ const Map = () => {
                 }
                 
             );
-            console.log(response)
             setAddress('');
             setEntrance('');
             setFloor('');
@@ -201,6 +201,8 @@ const Map = () => {
             setAppNumber('')
             setComment('');
             setNumberOfBottle('');
+            
+            navigate('/ordercreated')
             
         } catch (error) {
             if (!error?.response) {
@@ -290,15 +292,13 @@ const Map = () => {
                             !validFloor ||
                             !address.length ||
                             !validComment ? true : false}
-                        >
-                        Create order
-                        </button>
-
-
+                >
+                    Create order
+                </button>
             </form>
             <div ref={mapContainer} className="map-container" />
         </section>
     );
 }
 
-export default Map
+export default CreateOrder

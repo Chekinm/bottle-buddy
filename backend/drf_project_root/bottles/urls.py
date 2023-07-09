@@ -54,15 +54,20 @@ urlpatterns = [
           name='update',
           ),
 
-     path('filteredorder/',
+     path('filteredorders/',
           FilteredOrderAPI.as_view({'get': 'list'}),
           name='filteredorders',
           ),
+     
+     path('creatororders/',
+          FilteredOrderAPI.as_view({'get': 'list'}),
+          name='creatororders',
+          ),
+
 
      path('listorders/',
           OrderAPI.as_view({'get': 'list'}),
           name='listorders',
           ),
 
-     
      ]

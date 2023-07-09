@@ -10,7 +10,8 @@ import Missing from './components/Missing';
 import Home from './components/Home';
 import RequireAuth from './components/RequireAuth';
 import StayLoggedIn from './components/StayLoggedIn';
-import Map from './components/Map';
+import CreateOrder from './components/CreateOrder'
+import OrderCreated from './components/OrderCreated';
 import { Route, Routes } from 'react-router-dom';
 
 
@@ -31,7 +32,8 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route path="/" element={<Home />} />
             <Route path="users" element={<Users />} />
-            <Route path="map" element={<Map />} />
+            <Route path="createorder" element={<CreateOrder />} />
+            <Route path="ordercreated" element={<OrderCreated />} />
           </Route>
         </Route>
         <Route path="*" element={<Missing />} />

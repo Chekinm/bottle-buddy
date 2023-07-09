@@ -44,14 +44,40 @@ class OrderOperationsMixin (ListModelMixin,
 
 
 class FilteredOrderOperationsMixin(OrderOperationsMixin):
-    
+
     def get_queryset(self):
-        # Apply your filtering logic here
+        
         queryset = super().get_queryset()
-        # Filter the queryset as needed
-        filtered_queryset = queryset.filter(Q(latitude__range=(0, 35)) &
-                                            Q(longitude__range=(0, 35)) &
+        request_query = self.request.GET
+
+        min_lat = request_query.get('min_lat')
+
+        max_lat = request_query.get('max_lat')
+
+        min_lng = request_query.get('min_lng')
+        max_lng = request_query.get('max_lng')
+
+
+        print(min_lat, max_lat, min_lng, max_lng)
+        filtered_queryset = queryset.filter(Q(latitude__range=(min_lat, max_lat)) &
+                                            Q(longitude__range=(min_lng, max_lng)) &
                                             Q(status=1))
+        return filtered_queryset
+    
+
+
+class FilteredOrderOperationsMixin(OrderOperationsMixin):
+
+    def get_queryset(self):
+        
+        queryset = super().get_queryset()
+        
+        request_query = self.request.GET
+        print(request_query)
+        user_id = request_query.get('user_id')
+
+        print(user_id)
+        filtered_queryset = queryset.filter(supplier=user_id)
         return filtered_queryset
 
 
