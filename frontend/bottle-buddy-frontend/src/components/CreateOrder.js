@@ -8,7 +8,7 @@ import useAuth from '../hooks/useAuth';
 import env from "react-dotenv";
 
 // const MAP_BOX_TOKEN = env.REACT_APP_MAPBOX_TOKEN
-mapboxgl.accessToken = 'pk.eyJ1IjoibWNoZWtpbiIsImEiOiJjbGpyaGw2YnUwaWp1M3NwcmtjMGx2ejBwIn0.jyvSb1cyx7ZVVi-QOmUplg';
+mapboxgl.accessToken = env.REACT_APP_MAPBOX_TOKEN
 
 mapboxgl.setRTLTextPlugin(
     'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'

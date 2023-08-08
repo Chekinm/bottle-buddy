@@ -9,8 +9,7 @@ import useGeolocation from '../hooks/useGeoLocation';
 import env from "react-dotenv";
 
 // const MAP_BOX_TOKEN = env.REACT_APP_MAPBOX_TOKEN
-mapboxgl.accessToken = 'pk.eyJ1IjoibWNoZWtpbiIsImEiOiJjbGpyaGw2YnUwaWp1M3NwcmtjMGx2ejBwIn0.jyvSb1cyx7ZVVi-QOmUplg';
-
+mapboxgl.accessToken = env.REACT_APP_MAPBOX_TOKEN
 
 
 const TEXT_REGEX = /^[a-zA-Z/0-9-_]{0,250}$/;
