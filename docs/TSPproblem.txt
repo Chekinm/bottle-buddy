@@ -1,3 +1,0 @@
-https://stackoverflow.com/questions/14527815/how-to-fix-the-start-and-end-points-in-travelling-salesmen-problem
-
-https://rapidapi.com/trueway/api/trueway-directions2/
