@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", "234234233454jhksjdhfFDFsd234234234")
-
+DATABASE_URL = os.environ.get("DATABASE_URL", "No database configured")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
@@ -104,8 +104,7 @@ WSGI_APPLICATION = 'bottle_buddy.wsgi.application'
 if RENDER_EXTERNAL_HOSTNAME:
     DATABASES = {
         'default': dj_database_url.config(
-            default=('postgres://dbuser:0oH6faqUbSUUb9EoNnr2Y6agGH14uaUj@'
-                     'dpg-cie33q98g3n4p2rb8bsg-a/bottle_buddy_db'),
+            default=(DATABASE_URL),
             conn_max_age=600,
             conn_health_checks=True,
         ),
