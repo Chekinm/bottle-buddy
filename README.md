@@ -9,6 +9,6 @@ The project uses Django backend with Django Rest Framework and React frontend fo
 It aims to streamline recycling by connecting users for convenient and efficient order creation and management.
 
 This project is currently under construction. 
-Prototype  lives here [bottle-buddy-project](insert_link_here). Please be patient and wait for 3-5 minutes while the onrender starts the deployed project.
+Prototype  lives here [bottle-buddy-project](https://bottle-buddy-front.onrender.com/). Please be patient and wait for 3-5 minutes while the onrender starts the deployed project.
 
 Feel free to contact me if you have any questions.
